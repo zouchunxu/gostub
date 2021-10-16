@@ -11,9 +11,8 @@ DATA ·Id+5(SB)/1,$0x00
 DATA ·Id+6(SB)/1,$0x00
 DATA ·Id+7(SB)/1,$0x00
 
-GLOBL ·NameData(SB),8,$8
-DATA  ·NameData(SB)/8,$"gopher"
+GLOBL ·Name(SB),16,$24
 
-GLOBL ·Name(SB),8,$16
-DATA ·Name+0(SB)/8,$·NameData(SB)
+DATA ·Name+0(SB)/8,$·Name+16(SB)
 DATA ·Name+8(SB)/8,$6
+DATA ·Name+16(SB)/8,$"gopher"
