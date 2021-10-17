@@ -26,6 +26,8 @@ func output2(a, b int) {
 	println(a, b)
 }
 
+func sum(n int) int
+
 func main()
 
 func mainA() {

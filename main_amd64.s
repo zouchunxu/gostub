@@ -1,5 +1,6 @@
 #include "go_asm.h"
 #include "textflag.h"
+#include "funcdata.h"
 
 GLOBL ·num(SB),8,$16
 DATA ·num+0(SB)/8,$1
@@ -35,6 +36,8 @@ TEXT ·Swap(SB),$8-32
     RET
 
 TEXT ·main(SB),$24-0
+    NO_LOCAL_POINTERS
+
     MOVQ $0, a-8*2(SP) // a = 0
     MOVQ $0, a-8*1(SP) // b = 0
     MOVQ $10,AX
@@ -56,12 +59,19 @@ TEXT ·main(SB),$24-0
     CALL ·output2(SB)
 
 
-    MOVQ $0,0(SP)
+    MOVQ $1,0(SP)
     MOVQ $2,8(SP)
     MOVQ $3,16(SP)
     CALL ·If(SB)
 
     MOVQ 24(SP),AX
+    MOVQ AX,0(SP)
+    CALL ·output(SB)
+
+    MOVQ $100,0(SP)
+    CALL ·sum(SB)
+    MOVQ 8(SP),AX
+
     MOVQ AX,0(SP)
     CALL ·output(SB)
     RET
@@ -79,3 +89,48 @@ L:
     MOVQ BX, ret+24(FP)
     RET
 
+TEXT ·LoopAdd(SB), NOSPLIT,$0-32
+    MOVQ cnt+0(FP), AX
+    MOVQ v0+8(FP), BX
+    MOVQ step+16(FP), CX
+
+LOOP_BEGIN:
+    MOVQ $0,DX
+
+LOOP_IF:
+    CMPQ DX,AX
+    JL LOOP_BODY
+    JMP LOOP_END
+
+LOOP_BODY:
+    ADDQ $1,DX
+    ADDQ CX,BX
+    JMP LOOP_IF
+
+LOOP_END:
+    MOVQ BX,ret+24(FP)
+    RET
+
+TEXT ·sum(SB), $16-16
+    NO_LOCAL_POINTERS
+    MOVQ n+0(FP), AX       // n
+    MOVQ result+8(FP), BX  // result
+
+    CMPQ AX, $0            // test n - 0
+    JG   L_STEP_TO_END     // if > 0: goto L_STEP_TO_END
+    JMP  L_END             // goto L_STEP_TO_END
+
+L_STEP_TO_END:
+    SUBQ $1, AX            // AX -= 1
+    MOVQ AX, 0(SP)         // arg: n-1
+    CALL ·sum(SB)          // call sum(n-1)
+    MOVQ 8(SP), BX         // BX = sum(n-1)
+
+    MOVQ n+0(FP), AX       // AX = n
+    ADDQ AX, BX            // BX += AX
+    MOVQ BX, result+8(FP)  // return BX
+    RET
+
+L_END:
+    MOVQ $0, result+8(FP) // return 0
+    RET
