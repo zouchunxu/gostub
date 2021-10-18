@@ -30,7 +30,6 @@ func output2(a, b int) {
 func sum(n int) int
 
 type FunTwiceClosure struct {
-	Y int
 	F uintptr
 	X int
 }
@@ -38,7 +37,6 @@ type FunTwiceClosure struct {
 func ptrToFunc(p unsafe.Pointer) func() int
 
 func asmFunTwiceClosureAddr() uintptr
-func asmFunTwiceClosureBody() int
 
 func NewTwiceFunClosure(x int) func() int {
 	var p = &FunTwiceClosure{
@@ -50,12 +48,16 @@ func NewTwiceFunClosure(x int) func() int {
 	return ptrToFunc(unsafe.Pointer(p))
 }
 
-func main() {
-	fnTwice := NewTwiceFunClosure(1)
+func SyscallWrite_Darwin(int, string) int
 
-	println(fnTwice()) // 1*2 => 2
-	println(fnTwice()) // 2*2 => 4
-	println(fnTwice()) // 4*2 => 8
+func main() {
+	SyscallWrite_Darwin(1, "hello syscall!\n")
+
+	//fnTwice := NewTwiceFunClosure(1)
+	//
+	//println(fnTwice()) // 1*2 => 2
+	//println(fnTwice()) // 2*2 => 4
+	//println(fnTwice()) // 4*2 => 8
 }
 
 func mainA() {
