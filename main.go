@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"unsafe"
 )
 
 var num [2]int
@@ -28,7 +29,34 @@ func output2(a, b int) {
 
 func sum(n int) int
 
-func main()
+type FunTwiceClosure struct {
+	Y int
+	F uintptr
+	X int
+}
+
+func ptrToFunc(p unsafe.Pointer) func() int
+
+func asmFunTwiceClosureAddr() uintptr
+func asmFunTwiceClosureBody() int
+
+func NewTwiceFunClosure(x int) func() int {
+	var p = &FunTwiceClosure{
+		F: asmFunTwiceClosureAddr(),
+		X: x,
+	}
+	Y := 10
+	fmt.Println(Y)
+	return ptrToFunc(unsafe.Pointer(p))
+}
+
+func main() {
+	fnTwice := NewTwiceFunClosure(1)
+
+	println(fnTwice()) // 1*2 => 2
+	println(fnTwice()) // 2*2 => 4
+	println(fnTwice()) // 4*2 => 8
+}
 
 func mainA() {
 

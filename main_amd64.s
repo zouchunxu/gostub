@@ -35,7 +35,7 @@ TEXT ·Swap(SB),$8-32
     MOVQ AX, ret1+24(FP) // ret1 = AX
     RET
 
-TEXT ·main(SB),$24-0
+TEXT ·main1(SB),$24-0
     NO_LOCAL_POINTERS
 
     MOVQ $0, a-8*2(SP) // a = 0
@@ -133,4 +133,21 @@ L_STEP_TO_END:
 
 L_END:
     MOVQ $0, result+8(FP) // return 0
+    RET
+
+TEXT ·ptrToFunc(SB), NOSPLIT, $0-16
+    MOVQ ptr+0(FP), AX // AX = ptr
+    MOVQ AX, ret+8(FP) // return AX
+    RET
+
+TEXT ·asmFunTwiceClosureAddr(SB), NOSPLIT, $0-8
+    LEAQ ·asmFunTwiceClosureBody(SB), AX // AX = ·asmFunTwiceClosureBody(SB)
+    MOVQ AX, ret+0(FP)                   // return AX
+    RET
+
+TEXT ·asmFunTwiceClosureBody(SB), NOSPLIT|NEEDCTXT, $0-8
+    MOVQ 16(DX), AX
+    ADDQ AX   , AX        // AX *= 2
+    MOVQ AX   , 16(DX)     // ctx.X = AX
+    MOVQ AX   , ret+0(FP) // return AX
     RET
