@@ -159,5 +159,21 @@ TEXT ·SyscallWrite_Darwin(SB), NOSPLIT, $0
     MOVQ msg_data+8(FP), SI
     MOVQ msg_len+16(FP), DX
     SYSCALL
-    MOVQ AX, ret+0(FP)
+    MOVQ $1, ret+24(FP)
+    RET
+
+// func getg() unsafe.Pointer
+TEXT ·getg(SB), NOSPLIT, $0-8
+    MOVQ TLS, AX
+    MOVQ 0(AX)(TLS*1), CX
+    MOVQ CX, ret+0(FP)
+    RET
+
+// func testP() unsafe.Pointer
+TEXT ·testP(SB), NOSPLIT, $8
+    MOVQ fd+0(FP),       DI
+    MOVQ (DI), AX
+    MOVQ (AX), BX
+    MOVQ BX,0(SP)
+    CALL ·output(SB)
     RET

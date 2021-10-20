@@ -50,8 +50,51 @@ func NewTwiceFunClosure(x int) func() int {
 
 func SyscallWrite_Darwin(int, string) int
 
+type ta struct {
+	a uint32
+	c int
+}
+
+func getg() unsafe.Pointer
+
+const g_goid_offset = 152 // Go1.10
+
+func GetGroutineId() int64 {
+	g := getg()
+	p := (*int64)(unsafe.Pointer(uintptr(g) + g_goid_offset))
+	return *p
+}
+
+func testP(**int)
+
 func main() {
-	SyscallWrite_Darwin(1, "hello syscall!\n")
+
+	a := 1
+	b := &a
+	testP(&b)
+
+	//
+	//t := &ta{}
+	//fmt.Printf("%d\n",&t.a)
+	//fmt.Printf("%d\n",&t.c)
+
+	//fmt.Println(GetGroutineId())
+	//go func() {
+	//	fmt.Println(GetGroutineId())
+	//}()
+	//time.Sleep(1*time.Second)
+
+	//var a *[10000]int
+
+	//a = (*[10000]int)(unsafe.Pointer(t))
+	//a[0] = 1
+	//t.b[0] = 10
+	//a[1] = 2
+	//a[9999] = 20
+	//fmt.Println(a[0])
+	//fmt.Println(a[9999])
+
+	//fmt.Println(SyscallWrite_Darwin(1, "hello syscall!\n"))
 
 	//fnTwice := NewTwiceFunClosure(1)
 	//
