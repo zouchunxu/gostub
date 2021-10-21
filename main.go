@@ -57,7 +57,7 @@ type ta struct {
 
 func getg() unsafe.Pointer
 
-const g_goid_offset = 152 // Go1.10
+const g_goid_offset = 152 // Go>=1.10
 
 func GetGroutineId() int64 {
 	g := getg()
