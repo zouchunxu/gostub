@@ -103,24 +103,6 @@ func main() {
 	//println(fnTwice()) // 4*2 => 8
 }
 
-func mainA() {
-
-	a := 1
-	b := 2
-	c, d := Swap(a, b)
-	fmt.Println(c, d)
-	fmt.Println("end")
-
-	fmt.Println(num[0])
-
-	fmt.Println(boolValue)
-	fmt.Println(trueValue)
-	fmt.Println(falseValue)
-	fmt.Println(int32Value)
-
-	fmt.Println(Add(1, 2))
-}
-
 ////monr
 //func main() {
 //	fmt.Println(asm.Id)
