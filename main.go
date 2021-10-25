@@ -74,9 +74,9 @@ func main() {
 	testP(&b)
 
 	//
-	//t := &ta{}
-	//fmt.Printf("%d\n",&t.a)
-	//fmt.Printf("%d\n",&t.c)
+	t := &ta{}
+	fmt.Printf("%d\n", &t.a)
+	fmt.Printf("%d\n", &t.c)
 
 	//fmt.Println(GetGroutineId())
 	//go func() {
