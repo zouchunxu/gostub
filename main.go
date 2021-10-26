@@ -76,7 +76,7 @@ func main() {
 	//
 	t := &ta{}
 	fmt.Printf("%d\n", &t.a)
-	fmt.Printf("%d\n", &t.c)
+	//fmt.Printf("%d\n", &t.c)
 
 	//fmt.Println(GetGroutineId())
 	//go func() {
